@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	obsws "github.com/muesli/go-obs-websocket"
+	obsws "github.com/DanceNgine/go-obs-websocket"
 	"github.com/spf13/cobra"
 )
 
