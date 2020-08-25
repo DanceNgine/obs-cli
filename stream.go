@@ -1,7 +1,9 @@
 package main
 
 import (
-	obsws "github.com/muesli/go-obs-websocket"
+	"fmt"
+	
+	obsws "github.com/DanceNgine/go-obs-websocket"
 	"github.com/spf13/cobra"
 )
 
@@ -21,6 +23,15 @@ var (
 			return stopStream()
 		},
 	}
+	
+	statusStreamCmd = &cobra.Command{
+		Use:	"status-stream",
+		Short: "Displays Status",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return statusStream()
+		},
+	
+	}
 )
 
 func startStream() error {
@@ -34,7 +45,24 @@ func stopStream() error {
 	return req.Send(*client)
 }
 
+func statusStream() error {
+	{
+		req := obsws.NewGetStreamingStatusRequest()
+		resp, err := req.SendReceive(*client)
+		if err != nil {
+			return err
+		}
+		fmt.Println("Stream Status")
+		fmt.Println("===============")
+		fmt.Println("Streaming: ", resp.Streaming)
+		fmt.Println("Time: ", resp.StreamTimecode)
+	}
+	
+	return nil
+}
+
 func init() {
-	// rootCmd.AddCommand(startStreamCmd)
+	rootCmd.AddCommand(startStreamCmd)
 	rootCmd.AddCommand(stopStreamCmd)
+	rootCmd.AddCommand(statusStreamCmd)
 }
